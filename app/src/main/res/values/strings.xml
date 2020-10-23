@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">To Do (Kotlin)</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about_text_with_paragraphs">
+        To Do is a software in the category of Task Management.the app contain all of the tasks that you need to
+        complete in a given day.
+    </string>
+    <string name="service_text">
+        - Add / Update / Delete Tasks
+        \n- Show complete tasks via checkbox
+        \n- Priority based Tasks
+        \n- Day Night Mode
+        \n- Daily Reminder\n
+    </string>
 </resources>
