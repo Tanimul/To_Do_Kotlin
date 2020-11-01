@@ -1,5 +1,6 @@
 package com.example.todokotlin.Ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,7 +10,13 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.todokotlin.Adapter.WorkListAdapter
 import com.example.todokotlin.R
+import com.example.todokotlin.Room.WorkViewModel
 import com.example.todokotlin.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,6 +27,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toggle: ActionBarDrawerToggle
     private var backpressed: Long = 0
     private var backtost: Toast? = null
+    private val newWordActivityRequestCode = 1
+    private lateinit var workViewModel: WorkViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +52,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //Add New Task
         binding.addWorkFloatingButton2.setOnClickListener {
-            //Start-new-activity -->Add New Task
-            startActivity(Intent(this, AddUpdateActivity::class.java));
+            val intent = Intent(this, AddUpdateActivity::class.java)
+            startActivityForResult(intent, newWordActivityRequestCode)
         }
 
         // Navigation item Clicking Event
         binding.navView.setNavigationItemSelectedListener(this)
 
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView2)
+        val adapter = WorkListAdapter(this)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+
+        workViewModel = ViewModelProviders.of(this).get(WorkViewModel::class.java)
+
+
+        workViewModel.allWorks.observe(
+            this,
+            Observer { works ->
+
+                works?.let {
+                    adapter.setWorks(it)
+                }
+            }
+        )
     }
 
     // Inflate the menu for search and delete icon
@@ -65,36 +93,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         //Start-new-activity
         when (menuitem.itemId) {
             R.id.nav_addwork -> {
-                startActivity(Intent(this, AddUpdateActivity::class.java))
-                //                intent = new Intent(HomeActivity.this, Addwork.class);
-//                startActivityForResult(intent, 1);
-//                break;
+                val intent = Intent(this, AddUpdateActivity::class.java)
+                startActivityForResult(intent, newWordActivityRequestCode)
             }
 
             R.id.nav_share -> {
-                //           intent = new Intent(Intent.ACTION_SEND);
-//                ApplicationInfo api = getApplicationContext().getApplicationInfo();
-//                String apkpath = api.sourceDir;
-//                /// intent.putExtra(Intent.EXTRA_TEXT, "apps address "))
-//                intent.putExtra(Intent.EXTRA_TEXT, Uri.fromFile(new File(apkpath)));
-//                intent.setType("text/plain");
-//                startActivity(Intent.createChooser(intent, "Share with"));
-//                break;
+
             }
             R.id.nav_setting -> {
                 startActivity(Intent(this, SettingActivity::class.java))
             }
-
-
-//            case R.id.nav_rate_me:
-//                try {
-//                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
-//                } catch (ActivityNotFoundException e) {
-//                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName())));
-//                }
-//                break;
-//
-
             R.id.nav_about -> {
                 startActivity(Intent(this, AboutActivity::class.java))
             }
@@ -124,4 +132,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
         backpressed = System.currentTimeMillis()
     }
+
 }

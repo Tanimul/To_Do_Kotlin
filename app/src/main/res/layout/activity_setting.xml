@@ -7,15 +7,20 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     tools:context=".Ui.SettingActivity">
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        tools:ignore="MissingConstraints" />
     <TextView
         android:id="@+id/comingSoon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:text="*More Options Coming Soon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+
         app:layout_constraintVertical_bias="0.019"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
